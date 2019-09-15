@@ -1,18 +1,18 @@
 package string
 
 import (
-	"testing"
 	"errors"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestUnpackString(t *testing.T) {
 	assert := assert.New(t)
-	getResult := func (value string) string {
+	getResult := func(value string) string {
 		result, _ := UnpackString(value)
 		return result
 	}
-	getError := func (value string) error {
+	getError := func(value string) error {
 		_, err := UnpackString(value)
 		return err
 	}
