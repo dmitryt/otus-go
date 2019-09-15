@@ -1,8 +1,9 @@
 package string
 
 import (
-	"testing"
 	"errors"
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 )
 
