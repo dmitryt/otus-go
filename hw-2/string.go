@@ -29,7 +29,7 @@ func UnpackString(str string) (string, error) {
 		if unicode.IsDigit(charCode) {
 			counter, _ = strconv.Atoi(string(charCode))
 			if lastSymbol == "" {
-				return "", errors.New("Incorrect input string")
+				return "", errors.New("incorrect input string")
 			}
 		} else {
 			result += lastSymbol
