@@ -1,9 +1,9 @@
 package string
 
 import (
+	"testing"
 	"errors"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestUnpackString(t *testing.T) {
