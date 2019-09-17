@@ -8,8 +8,8 @@ import (
 // FindWords - find 10 the most used words in incoming text
 func FindWords(txt string) []string {
 	var result []string
-	if (txt == "") {
-		return []string{}
+	if txt == "" {
+		return nil
 	}
 	words := regexp.MustCompile(`\s+`).Split(txt, -1)
 	hash := make(map[string]int)
