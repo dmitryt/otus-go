@@ -7,23 +7,63 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+type TestCaseType struct {
+	description string
+	testData string
+	expectedResult string
+	expectedError error
+}
+
 func TestUnpackString(t *testing.T) {
 	assert := assert.New(t)
-	getResult := func(value string) string {
-		result, _ := UnpackString(value)
-		return result
+	var testCases = []TestCaseType {
+		{
+			description: "it should work well with empty string",
+			testData: "",
+			expectedResult: "",
+		},
+		{
+			description: "it should unpack simple string correctly",
+			testData: "abcd",
+			expectedResult: "abcd",
+		},
+		{
+			description: "it should unpack basic string correctly",
+			testData: "a2b3c4",
+			expectedResult: "aabbbcccc",
+		},
+		{
+			description: "it should unpack basic string with unicode symbols correctly",
+			testData: "а2б3в4",
+			expectedResult: "аабббвввв",
+		},
+		{
+			description: "it should unpack symbols without number correctly",
+			testData: "ab2cd",
+			expectedResult: "abbcd",
+		},
+		{
+			description: "it should throw error, when string is incorrect",
+			testData: "45",
+			expectedError: errors.New("incorrect input string"),
+		},
+		{
+			description: "it should support escaping sequence in basic string",
+			testData: `qwe\45`,
+			expectedResult: "qwe44444",
+		},
+		{
+			description: "it should support escaping escape symbol in basic string",
+			testData: `qwe\\5`,
+			expectedResult: `qwe\\\\\`,
+		},
 	}
-	getError := func(value string) error {
-		_, err := UnpackString(value)
-		return err
+	for _, testCase := range testCases {
+		result, err := UnpackString(testCase.testData)
+		if testCase.expectedError != nil {
+			assert.Equal(testCase.expectedError, err, testCase.description)
+		} else {
+			assert.Equal(testCase.expectedResult, result, testCase.description)
+		}
 	}
-	assert.Equal("", getResult(""), "it should work well with empty string")
-	assert.Equal("abcd", getResult("abcd"), "it should unpack simple string correctly")
-	assert.Equal("aabbbcccc", getResult("a2b3c4"), "it should unpack basic string correctly")
-	assert.Equal("аабббвввв", getResult("а2б3в4"), "it should unpack basic string with unicode symbols correctly")
-	assert.Equal("abbcd", getResult("ab2cd"), "it should unpack symbols without number correctly")
-	assert.Equal(errors.New("incorrect input string"), getError("45"), "it should throw error, when string is incorrect")
-
-	assert.Equal("qwe44444", getResult(`qwe\45`), "it should support escape sequence in basic string")
-	assert.Equal(`qwe\\\\\`, getResult(`qwe\\5`), "it should support escape sequence in basic string")
 }
