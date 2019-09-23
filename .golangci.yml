@@ -25,7 +25,7 @@ linters:
     - staticcheck
     - structcheck
     - stylecheck
-    #- typecheck # keep commenting this line locally due to https://github.com/golangci/golangci-lint/issues/584
+    # - typecheck # keep commenting this line locally due to https://github.com/golangci/golangci-lint/issues/584
     - unconvert
     - unparam
     - unused
