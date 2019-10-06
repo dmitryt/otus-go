@@ -1,4 +1,4 @@
-package list
+package parallel
 
 import (
 	"errors"
@@ -28,14 +28,14 @@ func Run(tasks []Task, n int, maxErrors int) error {
 		}
 		select {
 		case err := <-tasksResults:
+			if err != nil {
+				cntErrors++
+			}
 			cntFinished++
 			cntWorkers--
 			// In case, when max errors occurred, we're waiting, when all tasks are finished and after that exiting with non-zero code
 			if cntErrors >= maxErrors && cntFinished == i {
 				return errors.New("too many errors occurred")
-			}
-			if err != nil {
-				cntErrors++
 			}
 		// Unblock the loop's iteration
 		default:

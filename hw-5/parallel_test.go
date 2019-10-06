@@ -1,4 +1,4 @@
-package list
+package parallel
 
 import (
 	"errors"
@@ -54,6 +54,36 @@ func TestRunFail(t *testing.T) {
 			return errors.New("Some Error")
 		},
 		func() error {
+			return errors.New("Some Error")
+		},
+	}
+	assert.Equal(Run(tasks, 2, 2), errors.New("too many errors occurred"))
+}
+
+func TestRunStopExecuting(t *testing.T) {
+	assert := assert.New(t)
+	var wg sync.WaitGroup
+	wg.Add(4)
+	tasks := []Task{
+		func() error {
+			wg.Done()
+			return nil
+		},
+		func() error {
+			wg.Done()
+			return errors.New("Some Error")
+		},
+		func() error {
+			wg.Done()
+			return errors.New("Some Error")
+		},
+		func() error {
+			wg.Done()
+			return errors.New("Some Error")
+		},
+		func() error {
+			// This task shouldn't be started, otherwise test will get failed
+			wg.Done()
 			return errors.New("Some Error")
 		},
 	}
